@@ -1,0 +1,28 @@
+
+vaadin-grid::part(header-cell) {
+    --vaadin-grid-cell-background: rgba(52, 106, 140, 0.75);
+    --vaadin-grid-cell-color: white;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 15pt;
+}
+
+vaadin-grid::part(row) {
+    --vaadin-grid-cell-background: rgba(140, 168, 187, 0.2);
+}
+
+vaadin-grid {
+    border: none;
+    --vaadin-button-border-radius: 10px;
+}
+
+.grid-book-image {
+    transition: all 500ms;
+}
+
+.grid-book-image:hover {
+    transform: scale(2);
+    position: absolute;
+    top: 2px;
+    transition: all 250ms;
+}

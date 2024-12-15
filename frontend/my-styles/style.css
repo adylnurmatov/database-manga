@@ -1,0 +1,145 @@
+.error {
+    color: red;
+    font-size: 10pt;
+    /*font-weight: bold;*/
+}
+
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    !*background-color: #f4f4f4;*!*/
+/*    color: #333;*/
+/*}*/
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+.header {
+    /*background: #005A7C;*/
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+.heading{
+    margin: 0.5em 0;
+}
+p {
+    line-height: 1.6;
+}
+.section {
+    /*background: #fff;*/
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 8px;
+}
+.signup {
+    background-color: #009688;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.book {
+    width: 20%;
+    background-color: rgba(101, 101, 101, 0.3);
+    margin: 1%;
+    padding: 10px 5px;
+    border-radius: 10px;
+    transition: all 200ms;
+}
+
+.book:hover {
+    transition: all 200ms;
+    transform: scale(1.02);
+}
+
+.book .labelImage {
+    width: 250px;
+    height: 400px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.bookImage {
+    width: 300px;
+    height: 450px;
+    border-radius: 5px;
+    margin: 10px 25px;
+    padding: 10px;
+    background-color: rgba(101, 101, 101, 0.3);
+}
+
+.infoItem {
+    border-bottom: 1px solid white;
+    width: 100%;
+    padding: 5px 0px;
+}
+
+.info {
+    margin: 25px 10px;
+    height: max-content;
+    width: 350px;
+    flex-direction: column;
+}
+
+.book-price {
+    color: red;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20pt;
+}
+
+.book-buy {
+    flex-direction: column;
+    background-color: rgba(101, 101, 101, 0.1);
+    height: max-content;
+    width: 300px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.author {
+    margin-top: 120px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: rgba(101, 101, 101, 0.3);
+    border-radius: 40px 40px 10px 10px;
+    padding: 10px;
+    width: 200px;
+    height: 80px;
+    position: relative;
+}
+
+.authorImage {
+    width: 150px;
+    height: 150px;
+    left: calc(50% - 75px);
+    top: -100px;
+    position: absolute;
+    border-radius: 100%;
+    transition: all 200ms;
+}
+
+.authorFullName {
+    margin-top: 50px;
+    text-align: center;
+    color: white;
+}
+
+.authorImage:hover {
+    transition: all 200ms;
+    transform: scale(1.02);
+}
+
+.authorFullName:hover {
+    color: #009688;
+    transition: all 200ms;
+}
