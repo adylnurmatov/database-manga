@@ -18,11 +18,6 @@ public class MailService {
     private String username;
 
     public void sendMail(String mail, MailStructure mailStructure) throws MessagingException {
-//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-////        simpleMailMessage.setFrom(username);
-//        simpleMailMessage.setTo(mail);
-//        simpleMailMessage.setSubject(mailStructure.getSubject());
-//        simpleMailMessage.setText(mailStructure.getMessage());
 
         MimeMessage simpleMailMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper;
@@ -33,6 +28,5 @@ public class MailService {
 
         mailSender.send(simpleMailMessage);
 
-//        mailSender.send(simpleMailMessage);
     }
 }

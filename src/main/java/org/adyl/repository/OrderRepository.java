@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    @Query("select distinct o from Order o left join fetch o.itemList where o.costumer = :costumer") //even if order don't have any order item we whatever must return this order
+    @Query("select distinct o from Order o left join fetch o.itemList where o.costumer = :costumer")
     List<Order> findAllByCostumer(Costumer costumer);
 
     @Query("select distinct o from Order o left join fetch o.itemList")

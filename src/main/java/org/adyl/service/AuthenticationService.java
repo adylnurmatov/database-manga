@@ -13,8 +13,7 @@ public class AuthenticationService {
     }
 
     public UserDetails getCurrentPrincipal() {
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        return principal.equals("anonymousUser") ? null : (UserDetails) principal;
+
         return authenticationContext.getAuthenticatedUser(UserDetails.class).orElse(null);
     }
 

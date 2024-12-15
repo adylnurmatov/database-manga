@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
-//@ComponentScan("org.nicholas.bookstorevaadin")
 public class AppConfig {
     @Autowired
     private BookRepository bookRepository;
@@ -71,12 +70,7 @@ public class AppConfig {
         //To DTO
         mapper.typeMap(Costumer.class, CostumerDTO.class).addMappings(mapping -> mapping.using((MappingContext<List<Order>, List<Integer>> context) -> {
             List<Order> orders = context.getSource();
-//            if(HibernateProxy.class.isInstance(orders)){
-//                HibernateProxy proxy = HibernateProxy.class.cast(orders);
-//                if (proxy.getHibernateLazyInitializer().isUninitialized()){
-//                    return Collections.emptyList();
-//                }
-//            }
+
             try {
                 return orders.stream().map(order -> order.getId()).collect(Collectors.toList());
             } catch (LazyInitializationException e){

@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.adyl</groupId>
-    <artifactId>BookStoreVaadin</artifactId>
+    <artifactId>mangaLib</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Manga</name>
     <description>Manga</description>

@@ -52,21 +52,14 @@ public class CategoriesView extends FlexLayout {
 //        setJustifyContentMode(JustifyContentMode.CENTER);
         add(new H1("Available Categories:"));
 
-//        Div availableCategories = new Div();
-//        availableCategories.setWidth("100%");
-//        availableCategories.setHeight("min-content");
 
         Grid<BookCategory> categoryGrid = new Grid<>(BookCategory.class, false);
-//        categoryGrid.addColumn(BookCategory::getCategoryDescription).setHeader("Category");
-//        categoryGrid.addColumn(LitRenderer.<BookCategory> of("<span>${book.name}</span>").withProperty("book.category", BookCategory::getCategoryDescription)).setHeader("Category");
+
         categoryGrid.addColumn(LitRenderer.<BookCategory> of("<a href='books?filter=category-${item.code}'> ${item.categoryDescription} </a>") //item - current object, categoryDescription - property getter that will be called for this object
                 .withProperty("categoryDescription", BookCategory::getCategoryDescription).withProperty("code", BookCategory::getCode)).setHeader("Category");
 
         categoryGrid.setItems(categories);
 
-//        availableCategories.add(categoryGrid);
-//        availableCategories.setWidth("35%");
-//        availableCategories.getStyle().setMarginTop("20px");
         categoryGrid.getStyle().setTextAlign(Style.TextAlign.CENTER);
         categoryGrid.setAllRowsVisible(true);
         categoryGrid.setWidth("35%");
@@ -75,8 +68,6 @@ public class CategoriesView extends FlexLayout {
         categoryGrid.getStyle().setMarginLeft("auto");
         categoryGrid.getStyle().setMarginRight("auto");
         categoryGrid.getStyle().setMarginTop("20px");
-//
-//        add(availableCategories);
         add(categoryGrid);
 
         if (!roles.isEmpty() && roles.contains("ROLE_ADMIN")) {
