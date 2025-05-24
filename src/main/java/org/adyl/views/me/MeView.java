@@ -265,7 +265,7 @@ public class MeView extends FlexLayout {
 
 
     private void showSuccess(String message){
-        Dialog success = new Dialog("Successo!");
+        Dialog success = new Dialog("Success!");
         VerticalLayout layout = new VerticalLayout(Alignment.CENTER);
         layout.add(new H4(message));
 

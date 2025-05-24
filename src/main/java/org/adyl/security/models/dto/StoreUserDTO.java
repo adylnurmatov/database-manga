@@ -1,5 +1,6 @@
 package org.adyl.security.models.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
@@ -11,6 +12,10 @@ public class StoreUserDTO implements DefaultDTO {
 
     @NotEmpty(message = "Specify the username!")
     private String username;
+
+    @NotEmpty(message = "Specify email!")
+    @Email(message = "Enter a valid email address!")
+    private String email;
 
     @NotEmpty(message = "Specify password!")
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\\_-]).{8,}$",
@@ -49,6 +54,14 @@ public class StoreUserDTO implements DefaultDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

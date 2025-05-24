@@ -66,8 +66,13 @@ public class RegistrationView extends FlexLayout {
 
 
         TextField username = new TextField("Username: ");
-        validationBinder.forField(username).withValidator(s -> !StringUtils.isEmpty(s), "Specify the username!").bind(StoreUser::getUsername, StoreUser::setUsername);
-
+        validationBinder.forField(username)
+                .withValidator(s -> !StringUtils.isEmpty(s), "Specify the username!").bind(StoreUser::getUsername, StoreUser::setUsername);
+        TextField email = new TextField("Email: ");
+        validationBinder.forField(email)
+                .withValidator(emailStr -> emailStr != null && emailStr.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"),
+                        "Enter a valid email address!")
+                .bind(StoreUser::getEmail, StoreUser::setEmail);
         PasswordField password = new PasswordField("Password: ");
         PasswordField passwordConfirmation = new PasswordField("Confirm password: ");
         validationBinder.forField(password).withValidator(s -> s.matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\\_-]).{8,}$"), "minimal one uppercase and lowercase English letter, + minimal one digit and one special character!")
@@ -81,7 +86,7 @@ public class RegistrationView extends FlexLayout {
         FormLayout formLayout = new FormLayout();
         formLayout.setWidth("min-content");
         formLayout.setWidth("100%");
-        formLayout.add(username, password, passwordConfirmation);
+        formLayout.add(username, email, password, passwordConfirmation);
 
         mainLayout.add(header, usedError, formLayout, register);
         add(mainLayout);

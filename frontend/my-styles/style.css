@@ -87,14 +87,14 @@ p {
 }
 
 .book-price {
-    color: red;
+    color: rgba(250, 14, 14, 0.65);
     font-family: "Times New Roman", Times, serif;
     font-size: 20pt;
 }
 
 .book-buy {
     flex-direction: column;
-    background-color: rgba(101, 101, 101, 0.1);
+    background-color: rgba(230, 37, 37, 0.1);
     height: max-content;
     width: 300px;
     justify-content: center;

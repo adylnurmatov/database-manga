@@ -17,6 +17,25 @@ public class MailService {
     @Value("${spring.mail.username}")
     private String username;
 
+    public void sendResetLink(String toEmail, String resetLink) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+
+            helper.setTo(toEmail);
+            helper.setFrom(username);
+            helper.setSubject("Password Reset Request");
+            String htmlContent = "<p>To reset your password, click the link below:</p>" +
+                    "<p><a href=\"" + resetLink + "\">Reset Password</a></p>" +
+                    "<p>If you didn't request this, you can ignore this email.</p>";
+
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Failed to send reset email", e);
+        }
+    }
+
     public void sendMail(String mail, MailStructure mailStructure) throws MessagingException {
 
         MimeMessage simpleMailMessage = mailSender.createMimeMessage();

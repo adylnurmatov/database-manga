@@ -35,7 +35,9 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         //centering content
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
-
+        loginForm.addForgotPasswordListener(event ->
+                loginForm.getUI().ifPresent(ui -> ui.navigate("/forgot-password"))
+        );
         loginForm.setAction("login");//it is the "action" attribute from form (where to send data)
         //Set the LoginForm action to "login" to post the login form to Spring Security
 

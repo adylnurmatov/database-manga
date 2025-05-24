@@ -1,6 +1,7 @@
 package org.adyl.security.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
@@ -12,8 +13,13 @@ public class StoreUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotEmpty(message = "Specify the username!")
     private String username;
+
+    @NotEmpty(message = "Specify email!")
+    @Email(message = "Enter a valid email address!")
+    private String email;
 
     @NotEmpty(message = "Specify password!")
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\\_-]).{8,}$",
@@ -24,9 +30,11 @@ public class StoreUser {
 
     @NotEmpty
     private String roles;
+
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
+
     private String image;
 
 
@@ -74,6 +82,14 @@ public class StoreUser {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

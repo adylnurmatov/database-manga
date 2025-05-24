@@ -15,4 +15,5 @@ public interface StoreUserRepository extends JpaRepository<StoreUser, Long> {
 
     StoreUser findByCustomer(Customer customer);
 
+    Optional<StoreUser> findByEmail(String email);
 }

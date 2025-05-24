@@ -1,49 +1,61 @@
 package org.adyl.security.services;
 
+import com.vaadin.flow.server.VaadinService;
 import org.adyl.exceptions.ObjectAlreadyPresentException;
 import org.adyl.exceptions.PasswordFormatException;
 import org.adyl.mapper.abstraction.AbstractMapperImpl;
 import org.adyl.model.Customer;
 import org.adyl.repository.CustomerRepository;
+import org.adyl.security.models.PasswordResetToken;
 import org.adyl.security.models.StoreUser;
 import org.adyl.security.models.dto.StoreRegistrationUserDTO;
 import org.adyl.security.models.dto.StoreUserDTO;
+import org.adyl.security.repositories.PasswordResetTokenRepository;
 import org.adyl.security.repositories.StoreUserRepository;
 import org.adyl.service.DefaultService;
+import org.adyl.service.MailService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 //@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser, Long> {
-    private final StoreUserRepository repository;
+    private final StoreUserRepository userRepository;
     private final CustomerRepository customerRepository;
+    private final PasswordResetTokenRepository tokenRepository;
     private final AbstractMapperImpl mapper;
+    private final MailService mailService;
     private PasswordEncoder encoder;
 
-    public StoreUserService(StoreUserRepository repository, CustomerRepository customerRepository, AbstractMapperImpl mapper, PasswordEncoder passwordEncoder) {
-        this.repository = repository;
+    public StoreUserService(StoreUserRepository userRepository, CustomerRepository customerRepository, PasswordResetTokenRepository tokenRepository, AbstractMapperImpl mapper, MailService mailService, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.customerRepository = customerRepository;
+        this.tokenRepository = tokenRepository;
         this.mapper = mapper;
+        this.mailService = mailService;
         this.encoder = passwordEncoder;
     }
 
     @Override
     public List<StoreUserDTO> findAll() {
-        return repository.findAll().stream().map(user -> mapper.toDTO(user, StoreUserDTO.class)).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(user -> mapper.toDTO(user, StoreUserDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public StoreUserDTO findByKey(Long key) {
-        return mapper.toDTO(repository.findById(key).orElseThrow(null), StoreUserDTO.class);
+        return mapper.toDTO(userRepository.findById(key).orElseThrow(null), StoreUserDTO.class);
     }
 
     public StoreUserDTO findByUsername(String username) {
-        return mapper.toDTO(repository.findByUsername(username), StoreUserDTO.class);
+        return mapper.toDTO(userRepository.findByUsername(username), StoreUserDTO.class);
     }
 
     private StoreUserDTO save(StoreUser user) {
@@ -51,7 +63,7 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
             Customer customerForUser = customerRepository.save(new Customer(user.getUsername()));
             user.setCustomer(customerForUser);
         }
-        user = repository.save(user);
+        user = userRepository.save(user);
         return mapper.toDTO(user, StoreUserDTO.class);
     }
 
@@ -74,7 +86,7 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
     public StoreUserDTO update(Long key, StoreUserDTO obj) {
         StoreUser user = mapper.toEntity(obj, StoreUser.class);
         user.setId(key);
-        repository.save(user);
+        userRepository.save(user);
         customerRepository.save(user.getCustomer());//
         return mapper.toDTO(user, StoreUserDTO.class);
     }
@@ -82,24 +94,24 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
     public StoreUserDTO update(Long key, StoreUser user) {
 //        StoreUser user = mapper.toEntity(obj, StoreUser.class);
         user.setId(key);
-        repository.save(user);
+        userRepository.save(user);
         customerRepository.save(user.getCustomer());//
         return mapper.toDTO(user, StoreUserDTO.class);
     }
 
     public StoreUserDTO update(String username, StoreUserDTO obj) {
-        StoreUser user = repository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Such user was not found!"));
+        StoreUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Such user was not found!"));
         StoreUser updatedUser = mapper.toEntity(obj, StoreUser.class);
         updatedUser.setId(user.getId());
-        repository.save(updatedUser);
+        userRepository.save(updatedUser);
         customerRepository.save(updatedUser.getCustomer());//
         return mapper.toDTO(updatedUser, StoreUserDTO.class);
     }
 
-    public StoreUser updatePasswordFor(String password, StoreUser user) throws PasswordFormatException {
+    public void updatePasswordFor(String password, StoreUser user) throws PasswordFormatException {
         if (password.matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\\_-]).{8,}$")) {
             user.setPassword(encoder.encode(password));
-            return repository.save(user);
+            userRepository.save(user);
         } else {
             throw new PasswordFormatException();
         }
@@ -107,8 +119,40 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
 
     @Override
     public void delete(Long key) {
-        StoreUser user = repository.findById(key).orElseThrow(() -> new IllegalArgumentException("Such user does no exist!"));
-        repository.deleteById(key);
+        StoreUser user = userRepository.findById(key).orElseThrow(() -> new IllegalArgumentException("Such user does no exist!"));
+        userRepository.deleteById(key);
         customerRepository.deleteById(user.getCustomer().getId());
     }
+
+    @Transactional
+    public void sendResetToken(String email) {
+        Optional<StoreUser> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()) return;
+
+        StoreUser user = optionalUser.get();
+        // Remove existing token if exists
+        tokenRepository.deleteByUser(user);
+
+        String token = UUID.randomUUID().toString();
+        LocalDateTime expiry = LocalDateTime.now().plusHours(1);
+        tokenRepository.save(new PasswordResetToken(token, user, expiry));
+
+        String link = "http://localhost:8081/reset-password?token=" + token;
+        mailService.sendResetLink(user.getEmail(), link);
+    }
+
+    public boolean resetPassword(String token, String newPassword) {
+        Optional<PasswordResetToken> optionalToken = tokenRepository.findByToken(token);
+        if (optionalToken.isEmpty() || optionalToken.get().isExpired()) {
+            return false;
+        }
+
+        StoreUser user = optionalToken.get().getUser();
+        user.setPassword(encoder.encode(newPassword));
+        userRepository.save(user);
+        tokenRepository.delete(optionalToken.get());
+
+        return true;
+    }
+
 }
