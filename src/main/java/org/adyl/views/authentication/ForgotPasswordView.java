@@ -9,6 +9,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.component.button.Button;
+import org.adyl.security.enums.ResetTokenStatus;
 import org.adyl.security.services.StoreUserService;
 
 @Route("/forgot-password")
@@ -35,8 +36,23 @@ public class ForgotPasswordView extends VerticalLayout {
                 message.setVisible(true);
                 return;
             }
-            userService.sendResetToken(email);
-            message.setText("If this email exists, a reset link has been sent.");
+
+            ResetTokenStatus result = userService.sendResetToken(email);
+
+            switch (result) {
+                case SUCCESS -> {
+                    message.setText("A reset link has been sent to your email.");
+                    message.getStyle().setColor("green");
+                }
+                case USER_NOT_FOUND -> {
+                    message.setText("No user found with that email address.");
+                    message.getStyle().setColor("red");
+                }
+                case TOKEN_ALREADY_SENT -> {
+                    message.setText("You’ve recently requested a reset. Please wait for the link to expire.");
+                    message.getStyle().setColor("orange");
+                }
+            }
             message.setVisible(true);
         });
 

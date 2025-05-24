@@ -38,8 +38,8 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
                 .getOrDefault("token", List.of(""))
                 .get(0);
 
-        if (token == null || token.isBlank()) {
-            add(new H1("Invalid reset token"));
+        if (token == null || token.isBlank() || !userService.isResetTokenValid(token)) {
+            add(new H1("Invalid or expired reset token"));
             return;
         }
 

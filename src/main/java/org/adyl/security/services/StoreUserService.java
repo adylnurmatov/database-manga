@@ -6,6 +6,7 @@ import org.adyl.exceptions.PasswordFormatException;
 import org.adyl.mapper.abstraction.AbstractMapperImpl;
 import org.adyl.model.Customer;
 import org.adyl.repository.CustomerRepository;
+import org.adyl.security.enums.ResetTokenStatus;
 import org.adyl.security.models.PasswordResetToken;
 import org.adyl.security.models.StoreUser;
 import org.adyl.security.models.dto.StoreRegistrationUserDTO;
@@ -125,21 +126,30 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
     }
 
     @Transactional
-    public void sendResetToken(String email) {
+    public ResetTokenStatus sendResetToken(String email) {
         Optional<StoreUser> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isEmpty()) return;
+        if (optionalUser.isEmpty()) {
+            return ResetTokenStatus.USER_NOT_FOUND;
+        }
 
         StoreUser user = optionalUser.get();
-        // Remove existing token if exists
+        Optional<PasswordResetToken> optionalToken = tokenRepository.findByUser(user);
+        if (optionalToken.isPresent() && !optionalToken.get().isExpired()) {
+            return ResetTokenStatus.TOKEN_ALREADY_SENT;
+        }
+
         tokenRepository.deleteByUser(user);
 
         String token = UUID.randomUUID().toString();
-        LocalDateTime expiry = LocalDateTime.now().plusHours(1);
+        LocalDateTime expiry = LocalDateTime.now().plusMinutes(1);
         tokenRepository.save(new PasswordResetToken(token, user, expiry));
 
         String link = "http://localhost:8081/reset-password?token=" + token;
         mailService.sendResetLink(user.getEmail(), link);
+
+        return ResetTokenStatus.SUCCESS;
     }
+
 
     public boolean resetPassword(String token, String newPassword) {
         Optional<PasswordResetToken> optionalToken = tokenRepository.findByToken(token);
@@ -154,5 +164,12 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
 
         return true;
     }
+
+    public boolean isResetTokenValid(String token) {
+        return tokenRepository.findByToken(token)
+                .filter(t -> !t.isExpired())
+                .isPresent();
+    }
+
 
 }
