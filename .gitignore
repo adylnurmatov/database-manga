@@ -1,6 +1,7 @@
 node_modules
 HELP.md
 target/
+src/main/resources/config.txt
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

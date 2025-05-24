@@ -189,7 +189,7 @@ public class CartView extends FlexLayout {
 
             buy.addClickListener(event -> {
                 Order order = new Order();
-                order.setCostumer(principal.getUser().getCostumer());
+                order.setCustomer(principal.getUser().getCustomer());
                 order.setOrderDate(new Date());
                 cart.getBookMap().keySet().forEach(book -> {
                     OrderItem orderItem = new OrderItem();

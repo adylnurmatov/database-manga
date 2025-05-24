@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CostumerDTO implements DefaultDTO {
+public class CustomerDTO implements DefaultDTO {
     private Integer id;
     @NotEmpty(message = "IDNP must be specified!")
     @Pattern(regexp = "^\\d{13}$", message = "IDNP must be of type 1234567890123!")
@@ -25,11 +25,11 @@ public class CostumerDTO implements DefaultDTO {
     private String email;
     private List<Integer> orders;
 
-    public CostumerDTO() {
+    public CustomerDTO() {
         orders = new ArrayList<>();
     }
 
-    public CostumerDTO(String idnp, String name, String address, String phone, String email, List<Integer> orders) {
+    public CustomerDTO(String idnp, String name, String address, String phone, String email, List<Integer> orders) {
         this.idnp = idnp;
         this.name = name;
         this.address = address;
@@ -38,7 +38,7 @@ public class CostumerDTO implements DefaultDTO {
         this.orders = orders;
     }
 
-    public CostumerDTO(Integer id, String idnp, String name, String address, String phone, String email) {
+    public CustomerDTO(Integer id, String idnp, String name, String address, String phone, String email) {
         this.id = id;
         this.idnp = idnp;
         this.name = name;

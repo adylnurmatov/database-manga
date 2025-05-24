@@ -17,8 +17,8 @@ import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import org.adyl.model.Costumer;
-import org.adyl.repository.CostumerRepository;
+import org.adyl.model.Customer;
+import org.adyl.repository.CustomerRepository;
 import org.adyl.security.details.StoreUserDetails;
 import org.adyl.security.models.StoreUser;
 import org.adyl.security.repositories.StoreUserRepository;
@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
 public class UsersView extends FlexLayout {
     private StoreUserRepository userRepository;
-    private CostumerRepository costumerRepository;
+    private CustomerRepository customerRepository;
     private AuthenticationService authenticationService;
     private Grid<StoreUser> usersGrid;
     private StoreUserDetails principal;
@@ -46,10 +46,10 @@ public class UsersView extends FlexLayout {
 
     private static final String USERS_IMAGES_FOLDER = "src/main/resources/static/images/users";
 
-    public UsersView(AuthenticationService authenticationService, StoreUserRepository userRepository, CostumerRepository costumerRepository, PasswordEncoder encoder) {
+    public UsersView(AuthenticationService authenticationService, StoreUserRepository userRepository, CustomerRepository customerRepository, PasswordEncoder encoder) {
         this.authenticationService = authenticationService;
         this.userRepository = userRepository;
-        this.costumerRepository = costumerRepository;
+        this.customerRepository = customerRepository;
         this.encoder = encoder;
 
         principal = (StoreUserDetails) authenticationService.getCurrentPrincipal();
@@ -98,8 +98,8 @@ public class UsersView extends FlexLayout {
         }).setHeader("Username");
 
         usersGrid.addColumn(StoreUser::getRoles).setHeader("Roles:");
-        usersGrid.addComponentColumn(storeUser -> new Anchor("/costumers?filter=" + storeUser.getCostumer().getId(), storeUser.getCostumer().getName())).setHeader("Costumer");
-//        usersGrid.addColumn(storeUser -> new Anchor("costumers/", storeUser.getCostumer().getName())).setHeader("Costumer");
+        usersGrid.addComponentColumn(storeUser -> new Anchor("/customers?filter=" + storeUser.getCustomer().getId(), storeUser.getCustomer().getName())).setHeader("Customer");
+//        usersGrid.addColumn(storeUser -> new Anchor("customers/", storeUser.getCustomer().getName())).setHeader("Customer");
         usersGrid.addColumn(
                         LitRenderer.<StoreUser> of("<vaadin-avatar style='margin-right: 10px;' img=\"/images/users/${item.pictureUrl}\" name=\"${item.userName}\" alt=\"Portrait of ${item.userName}\"></vaadin-avatar>").withProperty("pictureUrl", StoreUser::getImage)
                                 .withProperty("userName", StoreUser::getUsername))
@@ -162,8 +162,8 @@ public class UsersView extends FlexLayout {
         PasswordField password = new PasswordField("Password: ", "Enter new password");
 
         ComboBox<String> roles = new ComboBox<>("Role: ", "ROLE_USER", "ROLE_MANAGER", "ROLE_ADMIN");
-        ComboBox<Costumer> costumers = new ComboBox<>("Costumer: ", costumerRepository.findAll());
-        costumers.setItemLabelGenerator(Costumer::getName);
+        ComboBox<Customer> customers = new ComboBox<>("Customer: ", customerRepository.findAll());
+        customers.setItemLabelGenerator(Customer::getName);
 
         FlexLayout photo = new FlexLayout();
         photo.setFlexDirection(FlexDirection.COLUMN);
@@ -193,7 +193,7 @@ public class UsersView extends FlexLayout {
         if (user != null){
             username.setValue(user.getUsername());
             roles.setValue(user.getRoles());
-            costumers.setValue(user.getCostumer());
+            customers.setValue(user.getCustomer());
 
             save.setText("Edit!");
         }
@@ -202,7 +202,7 @@ public class UsersView extends FlexLayout {
         layout.setFlexDirection(FlexDirection.COLUMN);
         layout.add(username, password, roles);
         if (user!=null) {
-            layout.add(costumers);
+            layout.add(customers);
         }
         layout.add(photo, buttons);
 
@@ -224,7 +224,7 @@ public class UsersView extends FlexLayout {
             BinderValidationStatus validation = binder.validate();
             if (!validation.hasErrors()) {
 
-                StoreUser newUser = new StoreUser(username.getValue(), encoder.encode(password.getValue()), roles.getValue(), costumers.getValue());
+                StoreUser newUser = new StoreUser(username.getValue(), encoder.encode(password.getValue()), roles.getValue(), customers.getValue());
 
                 if (user!=null) {
                     newUser.setId(user.getId());
@@ -239,11 +239,11 @@ public class UsersView extends FlexLayout {
                     saveUploadedFileTo(imageName.get(), USERS_IMAGES_FOLDER+"/");
                 }
 
-                if (costumers.getValue() == null) { //if customer is not specified (for new  user) it must be created
-                    Costumer costumer = new Costumer();
-                    costumer.setName(username.getValue());
-                    costumerRepository.save(costumer);
-                    newUser.setCostumer(costumer);
+                if (customers.getValue() == null) { //if customer is not specified (for new  user) it must be created
+                    Customer customer = new Customer();
+                    customer.setName(username.getValue());
+                    customerRepository.save(customer);
+                    newUser.setCustomer(customer);
                 }
 
                 userRepository.save(newUser);

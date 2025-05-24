@@ -16,8 +16,8 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import org.adyl.model.Costumer;
-import org.adyl.repository.CostumerRepository;
+import org.adyl.model.Customer;
+import org.adyl.repository.CustomerRepository;
 import org.adyl.security.details.StoreUserDetails;
 import org.adyl.security.models.StoreUser;
 import org.adyl.security.repositories.StoreUserRepository;
@@ -26,21 +26,21 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-@Route(value = "costumers", layout = MainView.class)
+@Route(value = "customers", layout = MainView.class)
 @RolesAllowed({"ROLE_MANAGER", "ROLE_ADMIN"})
-public class CostumerView extends FlexLayout implements BeforeEnterObserver {
-    private CostumerRepository costumerRepository;
+public class CustomerView extends FlexLayout implements BeforeEnterObserver {
+    private CustomerRepository customerRepository;
     private StoreUserRepository userRepository;
 //    @Autowired
-//    private CostumerServiceImpl costumerService;
+//    private CustomerServiceImpl customerService;
     private AuthenticationService authenticationService;
     private StoreUserDetails principal;
     private List<String> roles;
-    private Grid<Costumer> costumersGrid;
+    private Grid<Customer> customersGrid;
 
-    public CostumerView(AuthenticationService authenticationService, CostumerRepository costumerRepository, StoreUserRepository userRepository) {
+    public CustomerView(AuthenticationService authenticationService, CustomerRepository customerRepository, StoreUserRepository userRepository) {
         this.authenticationService = authenticationService;
-        this.costumerRepository = costumerRepository;
+        this.customerRepository = customerRepository;
         this.userRepository = userRepository;
 
         principal = (StoreUserDetails) authenticationService.getCurrentPrincipal();
@@ -52,71 +52,71 @@ public class CostumerView extends FlexLayout implements BeforeEnterObserver {
         setHeight("100%");
         setFlexWrap(FlexWrap.WRAP);
 
-//        List<Costumer> costumers = costumerRepository.findAll();
-//        drawForAdministration(costumers);
+//        List<Customer> customers = customerRepository.findAll();
+//        drawForAdministration(customers);
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         String filter = event.getLocation().getQueryParameters().getSingleParameter("filter").orElse("");
-        List<Costumer> costumers = costumerRepository.findAll();
+        List<Customer> customers = customerRepository.findAll();
 
         if (StringUtils.hasText(filter) && filter.matches("^\\d+$")) {
-            costumers = List.of(costumerRepository.findById(Integer.parseInt(filter)).get());
+            customers = List.of(customerRepository.findById(Integer.parseInt(filter)).get());
         }
 
-        drawForAdministration(costumers);
+        drawForAdministration(customers);
     }
 
-    private void drawForAdministration(List<Costumer> costumers) {
+    private void drawForAdministration(List<Customer> customers) {
         removeAll();
         setFlexDirection(FlexDirection.COLUMN);
         setJustifyContentMode(JustifyContentMode.START);
 
-        H1 header = new H1("Costumers:");
+        H1 header = new H1("Customers:");
         setAlignSelf(Alignment.CENTER, header);
         header.getStyle().setMarginTop("20px");
         header.getStyle().setMarginBottom("20px");
 
         add(header);
 
-        costumersGrid = new Grid<>(Costumer.class, false);
-        costumersGrid.setAllRowsVisible(true);
-        costumersGrid.setHeight("min-content");
-        costumersGrid.setMaxHeight("65%");
-        costumersGrid.setWidth("95%");
-        costumersGrid.getStyle().setMarginTop("20px");
-        costumersGrid.getStyle().setMarginLeft("auto");
-        costumersGrid.getStyle().setMarginRight("auto");
+        customersGrid = new Grid<>(Customer.class, false);
+        customersGrid.setAllRowsVisible(true);
+        customersGrid.setHeight("min-content");
+        customersGrid.setMaxHeight("65%");
+        customersGrid.setWidth("95%");
+        customersGrid.getStyle().setMarginTop("20px");
+        customersGrid.getStyle().setMarginLeft("auto");
+        customersGrid.getStyle().setMarginRight("auto");
 
-        costumersGrid.addColumn(Costumer::getIdnp).setHeader("IDNP");
-        costumersGrid.addColumn(Costumer::getName).setHeader("Name");
-        costumersGrid.addColumn(Costumer::getAddress).setHeader("Address");
-        costumersGrid.addColumn(Costumer::getPhone).setHeader("Phone");
-        costumersGrid.addColumn(Costumer::getEmail).setHeader("Email");
+        customersGrid.addColumn(Customer::getIdnp).setHeader("IDNP");
+        customersGrid.addColumn(Customer::getName).setHeader("Name");
+        customersGrid.addColumn(Customer::getAddress).setHeader("Address");
+        customersGrid.addColumn(Customer::getPhone).setHeader("Phone");
+        customersGrid.addColumn(Customer::getEmail).setHeader("Email");
 
-        costumersGrid.setItems(costumers);
-        add(costumersGrid);
+        customersGrid.setItems(customers);
+        add(customersGrid);
 
         if (!roles.isEmpty() && roles.contains("ROLE_ADMIN")) {
-            costumersGrid.addComponentColumn(costumer -> {
+            customersGrid.addComponentColumn(customer -> {
                 Button edit = new Button("Edit");
                 edit.addClickListener(event -> {
-                    Dialog editDialogue = new Dialog("Edit Costumer info");
+                    Dialog editDialogue = new Dialog("Edit Customer info");
 
-                    addAddOrEditDialogueLayout(editDialogue, costumer);
+                    addAddOrEditDialogueLayout(editDialogue, customer);
 
                     editDialogue.open();
                 });
                 return edit;
             }).setHeader("Edit").setAutoWidth(true);
 
-//            costumersGrid.addComponentColumn(costumer -> {
+//            customersGrid.addComponentColumn(customer -> {
 //                Button delete = new Button("Delete");
 //                delete.addClickListener(event -> {
-//                    Dialog deleteDialogue = new Dialog("Delete Costumer Confirmation");
+//                    Dialog deleteDialogue = new Dialog("Delete Customer Confirmation");
 //
-//                    addDeleteDialogueLayout(deleteDialogue, costumer);
+//                    addDeleteDialogueLayout(deleteDialogue, customer);
 //
 //                    deleteDialogue.open();
 //                });
@@ -137,7 +137,7 @@ public class CostumerView extends FlexLayout implements BeforeEnterObserver {
 //        add.getStyle().setPadding("5px 10px");
 //
 //        add.addClickListener(event -> {
-//            Dialog addDialog = new Dialog("Add new Costumer");
+//            Dialog addDialog = new Dialog("Add new Customer");
 //
 //            addAddOrEditDialogueLayout(addDialog, null);
 //
@@ -145,8 +145,8 @@ public class CostumerView extends FlexLayout implements BeforeEnterObserver {
 //        });
     }
 
-    private void addAddOrEditDialogueLayout(Dialog editDialogue, Costumer costumer){
-        Binder<Costumer> binder = new Binder<>();
+    private void addAddOrEditDialogueLayout(Dialog editDialogue, Customer customer){
+        Binder<Customer> binder = new Binder<>();
 
         TextField idnp = new TextField("IDNP: ");
         TextField name = new TextField("Name: ");
@@ -163,12 +163,12 @@ public class CostumerView extends FlexLayout implements BeforeEnterObserver {
 
         buttons.add(save, cancel);
 
-        if (costumer != null){
-            idnp.setValue(costumer.getIdnp());
-            name.setValue(costumer.getName());
-            address.setValue(costumer.getAddress());
-            phone.setValue(costumer.getPhone());
-            email.setValue(costumer.getEmail());
+        if (customer != null){
+            idnp.setValue(customer.getIdnp());
+            name.setValue(customer.getName());
+            address.setValue(customer.getAddress());
+            phone.setValue(customer.getPhone());
+            email.setValue(customer.getEmail());
 
             save.setText("Edit!");
         }
@@ -181,24 +181,24 @@ public class CostumerView extends FlexLayout implements BeforeEnterObserver {
 
         save.addClickListener(event -> {
             binder.forField(idnp).withValidator(s -> StringUtils.hasText(s) || !s.equals("0000000000000"), "Specify IDNP!")
-                    .withValidator(s -> s.matches("^\\d{13}$"), "Specify IDNP in format of 0000000000000").bind(Costumer::getIdnp, Costumer::setIdnp);
-            binder.forField(name).withValidator(StringUtils::hasText, "Specify name!").bind(Costumer::getName, Costumer::setName);
-            binder.forField(address).withValidator(StringUtils::hasText, "Specify address!").bind(Costumer::getAddress, Costumer::setAddress);
+                    .withValidator(s -> s.matches("^\\d{13}$"), "Specify IDNP in format of 0000000000000").bind(Customer::getIdnp, Customer::setIdnp);
+            binder.forField(name).withValidator(StringUtils::hasText, "Specify name!").bind(Customer::getName, Customer::setName);
+            binder.forField(address).withValidator(StringUtils::hasText, "Specify address!").bind(Customer::getAddress, Customer::setAddress);
             binder.forField(phone).withValidator(StringUtils::hasText, "Specify the phone!")
-                    .withValidator(s -> s.matches("^\\+373\\d{8}$"), "Specify phone in format of +373xxxxxxxx").bind(Costumer::getPhone, Costumer::setPhone);
+                    .withValidator(s -> s.matches("^\\+373\\d{8}$"), "Specify phone in format of +373xxxxxxxx").bind(Customer::getPhone, Customer::setPhone);
             binder.forField(email).withValidator(StringUtils::hasText, "Specify email!")
-                    .withValidator(s -> s.matches("^.+@.+\\..+$"), "Specify email in format example@gmail.com").bind(Costumer::getEmail, Costumer::setEmail);
+                    .withValidator(s -> s.matches("^.+@.+\\..+$"), "Specify email in format example@gmail.com").bind(Customer::getEmail, Customer::setEmail);
 
 
             BinderValidationStatus validation = binder.validate();
             if (!validation.hasErrors()) {
-                Costumer newCostumer = new Costumer(idnp.getValue(), name.getValue(), address.getValue(), phone.getValue(), email.getValue());
+                Customer newCustomer = new Customer(idnp.getValue(), name.getValue(), address.getValue(), phone.getValue(), email.getValue());
 
-                if (costumer!=null) {
-                    newCostumer.setId(costumer.getId());
+                if (customer !=null) {
+                    newCustomer.setId(customer.getId());
                 }
 
-                costumerRepository.save(newCostumer);
+                customerRepository.save(newCustomer);
                 editDialogue.close();
                 getUI().ifPresent(ui -> ui.getPage().reload());
             }
@@ -208,10 +208,10 @@ public class CostumerView extends FlexLayout implements BeforeEnterObserver {
     }
 
 
-    protected void addDeleteDialogueLayout(Dialog dialog, Costumer costumer) {
-        H3 question = new H3("Are you sure you want to delete contact \"" + costumer.getName() + "\" (" + costumer.getIdnp() + ")?");
+    protected void addDeleteDialogueLayout(Dialog dialog, Customer customer) {
+        H3 question = new H3("Are you sure you want to delete contact \"" + customer.getName() + "\" (" + customer.getIdnp() + ")?");
         question.getStyle().setMarginBottom("20px");
-        H3 note = new H3("*new costumer will be created instead!!!!");
+        H3 note = new H3("*new customer will be created instead!!!!");
         question.getStyle().setMarginBottom("20px");
 
         Button delete = new Button("Delete");
@@ -225,24 +225,24 @@ public class CostumerView extends FlexLayout implements BeforeEnterObserver {
         dialog.add(question, buttons);
 
         delete.addClickListener(event -> {
-            //firstly we create new costumer for user
-            StoreUser user = userRepository.findByCostumer(costumer);
+            //firstly we create new customer for user
+            StoreUser user = userRepository.findByCustomer(customer);
             if (user!=null) {
-                Costumer newCostumer = new Costumer();
-                newCostumer.setName(user.getUsername());
-                costumerRepository.save(newCostumer);
+                Customer newCustomer = new Customer();
+                newCustomer.setName(user.getUsername());
+                customerRepository.save(newCustomer);
 
-                user.setCostumer(newCostumer);
+                user.setCustomer(newCustomer);
                 userRepository.save(user);
             }
 
-            costumerRepository.delete(costumer);
+            customerRepository.delete(customer);
 
 //            userRepository.save(user);
-            //User must have it's costumer. If we want to delete the customer for user we must create new one, but empty
-//            deleteCostumerForForItsUser(costumer);
-//            costumerRepository.delete(costumer);
-//            costumerService.deleteUserForCustomer(costumer);
+            //User must have its customer. If we want to delete the customer for user we must create new one, but empty
+//            deleteCustomerForForItsUser(customer);
+//            customerRepository.delete(customer);
+//            customerService.deleteUserForCustomer(customer);
             dialog.close();
             getUI().ifPresent(ui -> ui.getPage().reload());
         });
@@ -251,9 +251,9 @@ public class CostumerView extends FlexLayout implements BeforeEnterObserver {
 
 
 //    @Transactional
-//    protected void deleteCostumerForForItsUser(Costumer costumer) {
-//        StoreUser user = userRepository.findByCostumer(costumer);
+//    protected void deleteCustomerForForItsUser(Customer customer) {
+//        StoreUser user = userRepository.findByCustomer(customer);
 //        user.setUsername("CCC");
-////        user.setCostumer(null);
+////        user.setCustomer(null);
 //    }
 }

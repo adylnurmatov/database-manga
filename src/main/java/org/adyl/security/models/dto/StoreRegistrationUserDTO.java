@@ -3,7 +3,7 @@ package org.adyl.security.models.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import org.adyl.model.dto.CostumerDTO;
+import org.adyl.model.dto.CustomerDTO;
 import org.adyl.model.dto.DefaultDTO;
 
 public class StoreRegistrationUserDTO implements DefaultDTO {
@@ -19,16 +19,16 @@ public class StoreRegistrationUserDTO implements DefaultDTO {
     @Length(min = 8, message = "Minimal length is 8!")
     private String password;
 
-    private CostumerDTO costumer;
+    private CustomerDTO customer;
     private String image;
 
     public StoreRegistrationUserDTO() {
     }
 
-    public StoreRegistrationUserDTO(String username, String password, CostumerDTO costumer) {
+    public StoreRegistrationUserDTO(String username, String password, CustomerDTO customer) {
         this.username = username;
         this.password = password;
-        this.costumer = costumer;
+        this.customer = customer;
     }
 
     public Integer getId() {
@@ -55,12 +55,12 @@ public class StoreRegistrationUserDTO implements DefaultDTO {
         this.password = password;
     }
 
-    public CostumerDTO getCostumer() {
-        return costumer;
+    public CustomerDTO getCustomer() {
+        return customer;
     }
 
-    public void setCostumer(CostumerDTO costumer) {
-        this.costumer = costumer;
+    public void setCustomer(CustomerDTO customer) {
+        this.customer = customer;
     }
 
     public String getImage() {
@@ -77,7 +77,7 @@ public class StoreRegistrationUserDTO implements DefaultDTO {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", costumer=" + costumer +
+                ", customer=" + customer +
                 ", image='" + image + '\'' +
                 '}';
     }

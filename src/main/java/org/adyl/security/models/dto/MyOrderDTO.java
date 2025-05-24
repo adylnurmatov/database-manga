@@ -2,7 +2,7 @@ package org.adyl.security.models.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.adyl.model.dto.CostumerDTO;
+import org.adyl.model.dto.CustomerDTO;
 import org.adyl.model.dto.DefaultDTO;
 
 import java.util.Date;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MyOrderDTO implements DefaultDTO {
     private Integer id;
-    private CostumerDTO customer;
+    private CustomerDTO customer;
     @NotNull(message = "Specify order date")
     private Date orderDate;
     @Min(value = 1, message = "Minimal value is 1")
@@ -20,7 +20,7 @@ public class MyOrderDTO implements DefaultDTO {
     public MyOrderDTO() {
     }
 
-    public MyOrderDTO(CostumerDTO customer, Date orderDate, Double orderValue, List<Integer> itemList) {
+    public MyOrderDTO(CustomerDTO customer, Date orderDate, Double orderValue, List<Integer> itemList) {
         this.customer = customer;
         this.orderDate = orderDate;
         this.orderValue = orderValue;
@@ -35,11 +35,11 @@ public class MyOrderDTO implements DefaultDTO {
         this.id = id;
     }
 
-    public CostumerDTO getCostumer() {
+    public CustomerDTO getCustomer() {
         return customer;
     }
 
-    public void setCostumer(CostumerDTO customer) {
+    public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
     }
 

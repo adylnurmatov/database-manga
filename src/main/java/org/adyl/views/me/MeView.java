@@ -110,15 +110,15 @@ public class MeView extends FlexLayout {
 
         Span role = new Span("Current role: " + ((List)principal.getAuthorities()).get(0).toString().replace("ROLE_", ""));
 
-        Span costumerLabel = new Span("Costumer: ");
-        Anchor costumerLink = new Anchor("/costumers/me", principal.getUser().getCostumer().getName());
-        Div costumer = new Div(costumerLabel, costumerLink);
+        Span customerLabel = new Span("Customer: ");
+        Anchor customerLink = new Anchor("/customers/me", principal.getUser().getCustomer().getName());
+        Div customer = new Div(customerLabel, customerLink);
 
         Span ordersLabel = new Span("Orders: ");
         Anchor ordersLink = new Anchor("/orders/me", "see all the orders");
         Div orders = new Div(ordersLabel, ordersLink);
 
-        userData.add(username, role, costumer);
+        userData.add(username, role, customer);
         if (principal.getUser().getRoles()!=null && !principal.getUser().getRoles().contains("ROLE_MANAGER") && !principal.getUser().getRoles().contains("ROLE_ADMIN"))
             userData.add(orders);
         userData.add(changeUsername, passwordRefresh, changePic);
@@ -127,8 +127,8 @@ public class MeView extends FlexLayout {
 
 
 //        add(new H3(principal.toString()));
-//        add(new H3(principal.getUser().getCostumer().toString()));
-//        add(new H3(orderRepository.findAllByCostumer(principal.getUser().getCostumer()).toString()));
+//        add(new H3(principal.getUser().getCustomer().toString()));
+//        add(new H3(orderRepository.findAllByCustomer(principal.getUser().getCustomer()).toString()));
 //            add(new H3(Cart.toString()));
 
 
@@ -183,7 +183,7 @@ public class MeView extends FlexLayout {
                     storeUserService.updatePasswordFor(password.getValue(), principal.getUser());
                     dialog.close();
 
-                    showSuccess("Parola è cambiato con successo!!");
+                    showSuccess("Password has been successfully changed!!");
                 } catch (PasswordFormatException e) {
                     throw new RuntimeException(e);
                 }
@@ -209,13 +209,13 @@ public class MeView extends FlexLayout {
             newName.setInvalid(false);
 
             if (storeUserService.findByUsername(newName.getValue()) != null) {
-                newName.setErrorMessage("Sceglie un altro nome!");
+                newName.setErrorMessage("Username is already used!");
                 newName.setInvalid(true);
             } else {
                 StoreUserDTO currentUser = storeUserService.findByUsername(principal.getUsername());
                 currentUser.setUsername(newName.getValue());
                 storeUserService.update(currentUser.getId(), currentUser);
-                showSuccess("Il nome è cambiato con successo!");
+                showSuccess("Username has been successfully changed!");
                 principal.getUser().setUsername(newName.getValue());
                 dialog.close();
             }

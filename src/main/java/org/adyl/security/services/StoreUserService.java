@@ -3,8 +3,8 @@ package org.adyl.security.services;
 import org.adyl.exceptions.ObjectAlreadyPresentException;
 import org.adyl.exceptions.PasswordFormatException;
 import org.adyl.mapper.abstraction.AbstractMapperImpl;
-import org.adyl.model.Costumer;
-import org.adyl.repository.CostumerRepository;
+import org.adyl.model.Customer;
+import org.adyl.repository.CustomerRepository;
 import org.adyl.security.models.StoreUser;
 import org.adyl.security.models.dto.StoreRegistrationUserDTO;
 import org.adyl.security.models.dto.StoreUserDTO;
@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 //@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser, Long> {
     private final StoreUserRepository repository;
-    private final CostumerRepository costumerRepository;
+    private final CustomerRepository customerRepository;
     private final AbstractMapperImpl mapper;
     private PasswordEncoder encoder;
 
-    public StoreUserService(StoreUserRepository repository, CostumerRepository costumerRepository, AbstractMapperImpl mapper, PasswordEncoder passwordEncoder) {
+    public StoreUserService(StoreUserRepository repository, CustomerRepository customerRepository, AbstractMapperImpl mapper, PasswordEncoder passwordEncoder) {
         this.repository = repository;
-        this.costumerRepository = costumerRepository;
+        this.customerRepository = customerRepository;
         this.mapper = mapper;
         this.encoder = passwordEncoder;
     }
@@ -47,9 +47,9 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
     }
 
     private StoreUserDTO save(StoreUser user) {
-        if (user.getCostumer() == null) {
-            Costumer costumerForUser = costumerRepository.save(new Costumer(user.getUsername()));
-            user.setCostumer(costumerForUser);
+        if (user.getCustomer() == null) {
+            Customer customerForUser = customerRepository.save(new Customer(user.getUsername()));
+            user.setCustomer(customerForUser);
         }
         user = repository.save(user);
         return mapper.toDTO(user, StoreUserDTO.class);
@@ -75,7 +75,7 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
         StoreUser user = mapper.toEntity(obj, StoreUser.class);
         user.setId(key);
         repository.save(user);
-        costumerRepository.save(user.getCostumer());//
+        customerRepository.save(user.getCustomer());//
         return mapper.toDTO(user, StoreUserDTO.class);
     }
     
@@ -83,7 +83,7 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
 //        StoreUser user = mapper.toEntity(obj, StoreUser.class);
         user.setId(key);
         repository.save(user);
-        costumerRepository.save(user.getCostumer());//
+        customerRepository.save(user.getCustomer());//
         return mapper.toDTO(user, StoreUserDTO.class);
     }
 
@@ -92,7 +92,7 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
         StoreUser updatedUser = mapper.toEntity(obj, StoreUser.class);
         updatedUser.setId(user.getId());
         repository.save(updatedUser);
-        costumerRepository.save(updatedUser.getCostumer());//
+        customerRepository.save(updatedUser.getCustomer());//
         return mapper.toDTO(updatedUser, StoreUserDTO.class);
     }
 
@@ -109,6 +109,6 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
     public void delete(Long key) {
         StoreUser user = repository.findById(key).orElseThrow(() -> new IllegalArgumentException("Such user does no exist!"));
         repository.deleteById(key);
-        costumerRepository.deleteById(user.getCostumer().getId());
+        customerRepository.deleteById(user.getCustomer().getId());
     }
 }

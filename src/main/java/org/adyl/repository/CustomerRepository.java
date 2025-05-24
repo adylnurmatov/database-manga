@@ -2,8 +2,8 @@ package org.adyl.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.adyl.model.Costumer;
+import org.adyl.model.Customer;
 
 @Repository
-public interface CostumerRepository extends JpaRepository<Costumer, Integer> {
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 }

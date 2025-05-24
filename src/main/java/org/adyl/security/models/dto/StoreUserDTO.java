@@ -3,7 +3,7 @@ package org.adyl.security.models.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import org.adyl.model.dto.CostumerDTO;
+import org.adyl.model.dto.CustomerDTO;
 import org.adyl.model.dto.DefaultDTO;
 
 public class StoreUserDTO implements DefaultDTO {
@@ -23,16 +23,16 @@ public class StoreUserDTO implements DefaultDTO {
     @NotEmpty
     private String roles;
 
-    private CostumerDTO costumer;
+    private CustomerDTO customer;
 
     public StoreUserDTO() {
     }
 
-    public StoreUserDTO(String username, String password, String roles, CostumerDTO costumer) {
+    public StoreUserDTO(String username, String password, String roles, CustomerDTO customer) {
         this.username = username;
         this.password = password;
         this.roles = roles;
-        this.costumer = costumer;
+        this.customer = customer;
     }
 
     public Long getId() {
@@ -67,12 +67,12 @@ public class StoreUserDTO implements DefaultDTO {
         this.roles = roles;
     }
 
-    public CostumerDTO getCostumer() {
-        return costumer;
+    public CustomerDTO getCustomer() {
+        return customer;
     }
 
-    public void setCostumer(CostumerDTO costumer) {
-        this.costumer = costumer;
+    public void setCustomer(CustomerDTO customer) {
+        this.customer = customer;
     }
 
     public String getImage() {
@@ -90,7 +90,7 @@ public class StoreUserDTO implements DefaultDTO {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", roles='" + roles + '\'' +
-                ", costumer=" + costumer +
+                ", customer=" + customer +
                 ", image='" + image + '\'' +
                 '}';
     }

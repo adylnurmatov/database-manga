@@ -17,7 +17,7 @@ public class Order {
 //    @NotNull(message = "Specify customer!")
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Costumer costumer;
+    private Customer customer;
     @NotNull(message = "Specify order date")
     @Column(name = "order_date")
     private Date orderDate;
@@ -31,8 +31,8 @@ public class Order {
         itemList = new ArrayList<>();
     }
 
-    public Order(Costumer costumer, Date orderDate, Double orderValue) {
-        this.costumer = costumer;
+    public Order(Customer customer, Date orderDate, Double orderValue) {
+        this.customer = customer;
         this.orderDate = orderDate;
         this.orderValue = orderValue;
         itemList = new ArrayList<>();
@@ -46,12 +46,12 @@ public class Order {
         this.id = id;
     }
 
-    public Costumer getCustomer() {
-        return costumer;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCostumer(Costumer costumer) {
-        this.costumer = costumer;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Date getOrderDate() {
@@ -86,7 +86,7 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", customer=" + costumer +
+                ", customer=" + customer +
                 ", orderDate=" + orderDate +
                 ", orderValue=" + orderValue +
                 '}';

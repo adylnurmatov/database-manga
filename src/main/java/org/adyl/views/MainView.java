@@ -120,11 +120,11 @@ public class MainView extends AppLayout {
             buttons.add(contacts);
         }
 
-        Button costumers = new Button("Costumers");
-        costumers.addClickListener(event -> event.getSource().getUI().ifPresent(ui -> ui.navigate(CostumerView.class)));
-        costumers.getStyle().setMarginLeft("5px");
+        Button customers = new Button("Customers");
+        customers.addClickListener(event -> event.getSource().getUI().ifPresent(ui -> ui.navigate(CustomerView.class)));
+        customers.getStyle().setMarginLeft("5px");
         if (roles != null && (roles.contains("ROLE_MANAGER") || roles.contains("ROLE_ADMIN"))) {
-            buttons.add(costumers);
+            buttons.add(customers);
         }
 
         Button orders = new Button("Orders");

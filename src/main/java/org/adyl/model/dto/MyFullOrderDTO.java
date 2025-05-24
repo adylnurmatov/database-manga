@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MyFullOrderDTO {
     private Integer id;
-    private CostumerDTO customer;
+    private CustomerDTO customer;
     @NotNull(message = "Specify order date")
     private Date orderDate;
     @Min(value = 0, message = "Minimal value is 0")
@@ -20,7 +20,7 @@ public class MyFullOrderDTO {
         itemList = new ArrayList<>();
     }
 
-    public MyFullOrderDTO(CostumerDTO customer, Date orderDate, Double orderValue, List<LightOrderItemDTO> itemList) {
+    public MyFullOrderDTO(CustomerDTO customer, Date orderDate, Double orderValue, List<LightOrderItemDTO> itemList) {
         this.customer = customer;
         this.orderDate = orderDate;
         this.orderValue = orderValue;
@@ -35,11 +35,11 @@ public class MyFullOrderDTO {
         this.id = id;
     }
 
-    public CostumerDTO getCostumer() {
+    public CustomerDTO getCustomer() {
         return customer;
     }
 
-    public void setCostumer(CostumerDTO customer) {
+    public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
     }
 

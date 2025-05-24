@@ -2,7 +2,7 @@ package org.adyl.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.adyl.mapper.abstraction.AbstractMapper;
-import org.adyl.model.Costumer;
+import org.adyl.model.Customer;
 import org.adyl.model.OrderItem;
 import org.adyl.model.dto.OrderItemDTO;
 import org.adyl.repository.OrderItemRepository;
@@ -32,8 +32,8 @@ public class OrderItemServiceImpl implements DefaultService<OrderItemDTO, OrderI
         return mapper.toDTO(orderItemRepository.findById(key), OrderItemDTO.class);
     }
 
-    public List<OrderItemDTO> findAllByCostumer(Costumer costumer) {
-        List<OrderItem> orderItems = orderItemRepository.findAllByOrder_Costumer(costumer);
+    public List<OrderItemDTO> findAllByCustomer(Customer customer) {
+        List<OrderItem> orderItems = orderItemRepository.findAllByOrder_Customer(customer);
         return orderItems.stream().map(orderItem -> mapper.toDTO(orderItem, OrderItemDTO.class)).collect(Collectors.toList());
     }
 

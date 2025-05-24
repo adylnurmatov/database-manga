@@ -2,10 +2,10 @@ package org.adyl.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.adyl.mapper.abstraction.AbstractMapper;
-import org.adyl.model.Costumer;
+import org.adyl.model.Customer;
 import org.adyl.model.Order;
 import org.adyl.model.OrderItem;
-import org.adyl.model.dto.CostumerDTO;
+import org.adyl.model.dto.CustomerDTO;
 import org.adyl.model.dto.FullOrderDTO;
 import org.adyl.model.dto.MyFullOrderDTO;
 import org.adyl.repository.OrderRepository;
@@ -36,8 +36,8 @@ public class OrderServiceImpl implements DefaultService<FullOrderDTO, Order, Int
         return mapper.toDTO(orderRepository.findById(key).orElse(null), FullOrderDTO.class);
     }
 
-    public List<FullOrderDTO> findAllByCostumer(Costumer costumer) {
-        return orderRepository.findAllByCostumer(costumer).stream().map(order -> mapper.toDTO(order, FullOrderDTO.class)).collect(Collectors.toList());
+    public List<FullOrderDTO> findAllByCustomer(Customer customer) {
+        return orderRepository.findAllByCustomer(customer).stream().map(order -> mapper.toDTO(order, FullOrderDTO.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -50,15 +50,15 @@ public class OrderServiceImpl implements DefaultService<FullOrderDTO, Order, Int
         return mapper.toDTO(order, FullOrderDTO.class);
     }
 
-    public FullOrderDTO saveForCustomer(FullOrderDTO orderDTO, Costumer costumer) {
-        costumer.setOrders(Collections.EMPTY_LIST);
-        CostumerDTO costumerDTO = mapper.toDTO(costumer, CostumerDTO.class);
-        orderDTO.setCostumer(costumerDTO);
+    public FullOrderDTO saveForCustomer(FullOrderDTO orderDTO, Customer customer) {
+        customer.setOrders(Collections.EMPTY_LIST);
+        CustomerDTO customerDTO = mapper.toDTO(customer, CustomerDTO.class);
+        orderDTO.setCustomer(customerDTO);
         return save(orderDTO);
     }
 
-    public FullOrderDTO saveForCustomer(MyFullOrderDTO myOrderDTO, Costumer costumer) {
-        return saveForCustomer(mapper.toDTO(myOrderDTO, FullOrderDTO.class), costumer);
+    public FullOrderDTO saveForCustomer(MyFullOrderDTO myOrderDTO, Customer customer) {
+        return saveForCustomer(mapper.toDTO(myOrderDTO, FullOrderDTO.class), customer);
     }
 
     @Override

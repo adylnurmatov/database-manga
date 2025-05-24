@@ -40,7 +40,7 @@ public class OrdersMeView extends FlexLayout {
 
         principal = (StoreUserDetails) authenticationService.getCurrentPrincipal();
 
-        orders = orderRepository.findAllByCostumer(principal.getUser().getCostumer());
+        orders = orderRepository.findAllByCustomer(principal.getUser().getCustomer());
 //        System.out.println(orders);
 
         H1 header = new H1("Orders:");

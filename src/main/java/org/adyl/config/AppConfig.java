@@ -2,7 +2,7 @@ package org.adyl.config;
 
 import org.adyl.model.Author;
 import org.adyl.model.Book;
-import org.adyl.model.Costumer;
+import org.adyl.model.Customer;
 import org.adyl.model.Order;
 import org.adyl.model.OrderItem;
 import org.hibernate.LazyInitializationException;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.adyl.model.dto.AuthorDTO;
-import org.adyl.model.dto.CostumerDTO;
+import org.adyl.model.dto.CustomerDTO;
 import org.adyl.model.dto.LightOrderItemDTO;
 import org.adyl.model.dto.OrderDTO;
 import org.adyl.repository.BookRepository;
@@ -68,7 +68,7 @@ public class AppConfig {
 
     private void customerCustomMapper(ModelMapper mapper) {
         //To DTO
-        mapper.typeMap(Costumer.class, CostumerDTO.class).addMappings(mapping -> mapping.using((MappingContext<List<Order>, List<Integer>> context) -> {
+        mapper.typeMap(Customer.class, CustomerDTO.class).addMappings(mapping -> mapping.using((MappingContext<List<Order>, List<Integer>> context) -> {
             List<Order> orders = context.getSource();
 
             try {
@@ -76,13 +76,13 @@ public class AppConfig {
             } catch (LazyInitializationException e){
                 return Collections.emptyList();
             }
-        }).map(Costumer::getOrders, CostumerDTO::setOrders));
+        }).map(Customer::getOrders, CustomerDTO::setOrders));
 
         //From DTO
-        mapper.typeMap(CostumerDTO.class, Costumer.class).addMappings(mapping -> mapping.using((MappingContext<List<Integer>, List<Order>> context) -> {
+        mapper.typeMap(CustomerDTO.class, Customer.class).addMappings(mapping -> mapping.using((MappingContext<List<Integer>, List<Order>> context) -> {
             List<Integer> ordersId = context.getSource();
             return ordersId.stream().map(orderId -> orderRepository.findById(orderId).orElse(null)).collect(Collectors.toList());
-        }).map(CostumerDTO::getOrders, Costumer::setOrders));
+        }).map(CustomerDTO::getOrders, Customer::setOrders));
     }
 
     private void orderCustomMapper(ModelMapper mapper) {

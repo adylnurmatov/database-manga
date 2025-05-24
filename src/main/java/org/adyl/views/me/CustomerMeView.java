@@ -8,21 +8,21 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.Lumo;
 import jakarta.annotation.security.PermitAll;
-import org.adyl.model.Costumer;
-import org.adyl.repository.CostumerRepository;
+import org.adyl.model.Customer;
+import org.adyl.repository.CustomerRepository;
 import org.adyl.security.details.StoreUserDetails;
 import org.adyl.service.AuthenticationService;
 
-@Route("costumers/me")
+@Route("customers/me")
 @PermitAll
-public class CostumerMeView extends FlexLayout {
+public class CustomerMeView extends FlexLayout {
     private AuthenticationService authenticationService;
-    private CostumerRepository costumerRepository;
+    private CustomerRepository customerRepository;
 
     private StoreUserDetails principal;
 
-    public CostumerMeView(AuthenticationService authenticationService, CostumerRepository costumerRepository){
-        this.costumerRepository = costumerRepository;
+    public CustomerMeView(AuthenticationService authenticationService, CustomerRepository customerRepository){
+        this.customerRepository = customerRepository;
         this.authenticationService = authenticationService;
 
         getElement().getThemeList().add(Lumo.DARK);
@@ -32,7 +32,7 @@ public class CostumerMeView extends FlexLayout {
 
         principal = (StoreUserDetails) authenticationService.getCurrentPrincipal();
 
-        Costumer costumer = principal.getUser().getCostumer();
+        Customer customer = principal.getUser().getCustomer();
 
         H1 header = new H1("Your details:");
         header.getStyle().setMarginTop("20px");
@@ -40,20 +40,20 @@ public class CostumerMeView extends FlexLayout {
         VerticalLayout info = new VerticalLayout();
 
         PasswordField idnp = new PasswordField();
-        idnp.setValue(costumer.getIdnp());
+        idnp.setValue(customer.getIdnp());
         idnp.setReadOnly(true);
         idnp.getStyle().setMarginLeft("5px");
 
         Div idnpDiv = new Div(new Span("IDNP: "), idnp);
 
-        Span name = new Span("Name: " + costumer.getName());
-        Span address = new Span("Address: " + costumer.getAddress());
-        Span phone = new Span("Phone: " + costumer.getPhone());
+        Span name = new Span("Name: " + customer.getName());
+        Span address = new Span("Address: " + customer.getAddress());
+        Span phone = new Span("Phone: " + customer.getPhone());
 
-        Span email = new Span("Email: "+ costumer.getEmail());
+        Span email = new Span("Email: "+ customer.getEmail());
 
 //        EmailField email = new EmailField();
-//        email.setValue(costumer.getEmail());
+//        email.setValue(customer.getEmail());
 //        email.setReadOnly(true);
 
         Div orders = new Div(new Span("Orders: "), new Anchor("/orders/me", "see my orders..."));

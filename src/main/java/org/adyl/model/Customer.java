@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "customers")
-public class Costumer {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,13 +28,13 @@ public class Costumer {
     @NotEmpty(message = "Specify email!")
     @Pattern(regexp = "^.+@.+\\..+$", message = "Email must have next pattern: example@gmail.com")
     private String email;
-    @OneToMany(mappedBy = "costumer", cascade = {CascadeType.DETACH,
+    @OneToMany(mappedBy = "customer", cascade = {CascadeType.DETACH,
                                                  CascadeType.MERGE,
                                                  CascadeType.PERSIST,
                                                  CascadeType.REFRESH})
     private List<Order> orders;
 
-    public Costumer() {
+    public Customer() {
         name = "unset";
         idnp = "0000000000000";
         address = "unset";
@@ -43,7 +43,7 @@ public class Costumer {
         orders = new ArrayList<>();
     }
 
-    public Costumer(String name) {
+    public Customer(String name) {
         idnp = "0000000000000";
         address = "unset";
         phone = "+37300000000";
@@ -52,7 +52,7 @@ public class Costumer {
         orders = new ArrayList<>();
     }
 
-    public Costumer(String idnp, String name, String address, String phone, String email) {
+    public Customer(String idnp, String name, String address, String phone, String email) {
         this.idnp = idnp;
         this.name = name;
         this.address = address;
@@ -61,7 +61,7 @@ public class Costumer {
         orders = new ArrayList<>();
     }
 
-    public Costumer(Integer id, String idnp, String name, String address, String phone, String email) {
+    public Customer(Integer id, String idnp, String name, String address, String phone, String email) {
         this.id = id;
         this.idnp = idnp;
         this.name = name;
@@ -141,7 +141,7 @@ public class Costumer {
     @Override
     public boolean equals(Object obj) {
         if (obj != null) {
-            Costumer c2 = (Costumer) obj;
+            Customer c2 = (Customer) obj;
             return this.id.equals(c2.getId());
         }
         return false;

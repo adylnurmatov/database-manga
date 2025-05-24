@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import org.adyl.model.Costumer;
+import org.adyl.model.Customer;
 
 @Entity
 @Table(name = "users")
@@ -26,7 +26,7 @@ public class StoreUser {
     private String roles;
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Costumer costumer;
+    private Customer customer;
     private String image;
 
 
@@ -34,29 +34,29 @@ public class StoreUser {
         this.image = "Placeholder.png";
     }
 
-    public StoreUser(String username, String password, String roles, Costumer costumer) {
+    public StoreUser(String username, String password, String roles, Customer customer) {
         this.username = username;
         this.password = password;
         this.roles = roles;
-        this.costumer = costumer;
+        this.customer = customer;
         this.image = "Placeholder.png";
     }
 
-    public StoreUser(Long id, String username, String password, String roles, Costumer costumer) {
+    public StoreUser(Long id, String username, String password, String roles, Customer customer) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.roles = roles;
-        this.costumer = costumer;
+        this.customer = customer;
         this.image = "Placeholder.png";
     }
 
-    public StoreUser(Long id, String username, String password, String roles, Costumer costumer, String image) {
+    public StoreUser(Long id, String username, String password, String roles, Customer customer, String image) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.roles = roles;
-        this.costumer = costumer;
+        this.customer = customer;
         this.image = image;
     }
 
@@ -92,13 +92,14 @@ public class StoreUser {
         this.roles = roles;
     }
 
-    public Costumer getCostumer() {
-        return costumer;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCostumer(Costumer costumer) {
-        this.costumer = costumer;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
+
 
     public String getImage() {
         return image;
@@ -115,7 +116,7 @@ public class StoreUser {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", roles='" + roles + '\'' +
-                ", costumer=" + costumer +
+                ", customer=" + customer +
                 ", image='" + image + '\'' +
                 '}';
     }

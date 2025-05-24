@@ -20,9 +20,9 @@ import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.Lumo;
 import jakarta.annotation.security.RolesAllowed;
-import org.adyl.model.Costumer;
+import org.adyl.model.Customer;
 import org.adyl.model.Order;
-import org.adyl.repository.CostumerRepository;
+import org.adyl.repository.CustomerRepository;
 import org.adyl.repository.OrderRepository;
 import org.adyl.security.details.StoreUserDetails;
 import org.adyl.service.AuthenticationService;
@@ -37,14 +37,14 @@ import java.util.List;
 public class OrdersView extends FlexLayout {
     private AuthenticationService authenticationService;
     private OrderRepository orderRepository;
-    private CostumerRepository costumerRepository;
+    private CustomerRepository customerRepository;
     private StoreUserDetails principal;
     private FlexLayout ordersList;
     private List<Order> orders;
 
-    public OrdersView(AuthenticationService authenticationService, OrderRepository orderRepository, CostumerRepository costumerRepository) {
+    public OrdersView(AuthenticationService authenticationService, OrderRepository orderRepository, CustomerRepository customerRepository) {
         this.orderRepository = orderRepository;
-        this.costumerRepository = costumerRepository;
+        this.customerRepository = customerRepository;
         this.authenticationService = authenticationService;
 
         getElement().getThemeList().add(Lumo.DARK);
@@ -78,7 +78,7 @@ public class OrdersView extends FlexLayout {
             content.setWidth("70%");
             Grid<Order> ordersGrid = new Grid<>(Order.class, false);
 
-            ordersGrid.addComponentColumn(order -> order.getCustomer() != null ? new Anchor("/costumers?filter=" + order.getCustomer().getId(), order.getCustomer().getName()) : new Span("Removed!")).setHeader("Costumer").setAutoWidth(true);
+            ordersGrid.addComponentColumn(order -> order.getCustomer() != null ? new Anchor("/customers?filter=" + order.getCustomer().getId(), order.getCustomer().getName()) : new Span("Removed!")).setHeader("Customer").setAutoWidth(true);
             ordersGrid.addColumn(Order::getOrderDate).setHeader("Order date").setAutoWidth(true);
             ordersGrid.addColumn(order -> order.getOrderValue()+" MDL").setHeader("Order value").setAutoWidth(true);
 
@@ -150,8 +150,8 @@ public class OrdersView extends FlexLayout {
         Binder<Order> binder = new Binder<>();
 
         DateTimePicker orderDate = new DateTimePicker("Order date: ");
-        ComboBox<Costumer> costumers = new ComboBox<>("Costumer: ", costumerRepository.findAll());
-        costumers.setItemLabelGenerator(Costumer::getName);
+        ComboBox<Customer> customers = new ComboBox<>("Customer: ", customerRepository.findAll());
+        customers.setItemLabelGenerator(Customer::getName);
 //        NumberField orderValue = = new NumberField("Order value:");
 
         HorizontalLayout buttons = new HorizontalLayout();
@@ -165,7 +165,7 @@ public class OrdersView extends FlexLayout {
 
         if (order != null){
             orderDate.setValue(order.getOrderDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-            costumers.setValue(order.getCustomer());
+            customers.setValue(order.getCustomer());
             save.setText("Edit!");
         }
 
@@ -173,7 +173,7 @@ public class OrdersView extends FlexLayout {
 
         FlexLayout layout = new FlexLayout();
         layout.setFlexDirection(FlexDirection.COLUMN);
-        layout.add(orderDate, costumers, buttons);
+        layout.add(orderDate, customers, buttons);
 
         editDialogue.add(layout);
 
@@ -181,19 +181,19 @@ public class OrdersView extends FlexLayout {
             binder.forField(orderDate).withValidator(d -> d!=null, "Specify orderDate!")
                     .withValidator(d -> d.compareTo(LocalDateTime.now()) <= 0, "Date must not be greather than today!").bind(order1 -> order1.getOrderDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), (order1, localDateTime) -> order1.setOrderDate(Date.valueOf(localDateTime.toLocalDate())));
             if (order==null)
-                binder.forField(costumers).withValidator(c -> c!=null, "Specify the customer!").bind(Order::getCustomer, Order::setCostumer);
+                binder.forField(customers).withValidator(c -> c!=null, "Specify the customer!").bind(Order::getCustomer, Order::setCustomer);
 
             BinderValidationStatus validation = binder.validate();
 
 
             if (!validation.hasErrors()) {
-                Order newOrder = new Order(costumers.getValue(), Date.valueOf(orderDate.getValue().toLocalDate()), 0.0);
+                Order newOrder = new Order(customers.getValue(), Date.valueOf(orderDate.getValue().toLocalDate()), 0.0);
 
                 if (order!=null) {
                     newOrder.setId(order.getId());
                     order.recalculateOrderValue();
-                    if (costumers.getValue() == null) {
-                        newOrder.setCostumer(order.getCustomer());
+                    if (customers.getValue() == null) {
+                        newOrder.setCustomer(order.getCustomer());
                     }
                 }
 
