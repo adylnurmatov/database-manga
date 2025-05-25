@@ -58,7 +58,7 @@ public class MeView extends FlexLayout {
         setAlignItems(Alignment.CENTER);
 //        setJustifyContentMode(JustifyContentMode.CENTER);
 
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
 
         Image image = new Image("/images/users/" + principal.getUser().getImage(), principal.getUser().getImage());
         image.setWidth("200px");

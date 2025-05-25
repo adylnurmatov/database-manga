@@ -53,7 +53,7 @@ public class CartView extends FlexLayout {
 
 
 
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
 
         setFlexDirection(FlexDirection.COLUMN);
         setAlignItems(Alignment.CENTER);

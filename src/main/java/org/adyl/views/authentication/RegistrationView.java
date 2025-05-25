@@ -3,6 +3,7 @@ package org.adyl.views.authentication;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -44,7 +45,7 @@ public class RegistrationView extends FlexLayout {
         this.userService = userService;
         this.mapper = mapper;
 
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
         setSizeFull();
         setFlexDirection(FlexDirection.COLUMN);
         setAlignItems(Alignment.CENTER);
@@ -53,7 +54,7 @@ public class RegistrationView extends FlexLayout {
         FlexLayout mainLayout = new FlexLayout();
         mainLayout.setFlexDirection(FlexDirection.COLUMN);
         mainLayout.getStyle().setPadding("40px 20px");
-        mainLayout.getStyle().setBackgroundColor("#2c3d52");
+//        mainLayout.getStyle().setBackgroundColor("#2c3d52");
         mainLayout.setWidth("20%");
 
 
@@ -83,13 +84,16 @@ public class RegistrationView extends FlexLayout {
         register.getStyle().setMarginTop("15%");
 //        register.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        Anchor home = new Anchor("/", "Home");
+
         FormLayout formLayout = new FormLayout();
         formLayout.setWidth("min-content");
         formLayout.setWidth("100%");
         formLayout.add(username, email, password, passwordConfirmation);
 
-        mainLayout.add(header, usedError, formLayout, register);
+        mainLayout.add(header, usedError, formLayout, register, home);
         add(mainLayout);
+        mainLayout.setAlignContent(ContentAlignment.CENTER);
 
         setAlignSelf(Alignment.CENTER, formLayout);
 

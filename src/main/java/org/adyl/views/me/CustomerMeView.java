@@ -25,7 +25,7 @@ public class CustomerMeView extends FlexLayout {
         this.customerRepository = customerRepository;
         this.authenticationService = authenticationService;
 
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
         setSizeFull();
         setFlexDirection(FlexDirection.COLUMN);
         setAlignItems(Alignment.CENTER);

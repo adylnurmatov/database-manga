@@ -52,7 +52,7 @@ public class MainView extends AppLayout {
         userIcon.setHeight("100%");
         userIcon.getStyle().setBorderRadius("100%");
 
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
 
         home = new Html(new FileInputStream("src/main/resources/templates/welcome.html"));
 

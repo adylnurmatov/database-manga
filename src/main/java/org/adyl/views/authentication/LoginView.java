@@ -23,7 +23,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     public LoginView(){
 
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
         //setting it to full size
         setSizeFull();
 

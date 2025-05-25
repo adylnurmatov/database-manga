@@ -33,7 +33,7 @@ public class OrdersMeView extends FlexLayout {
         this.orderRepository = orderRepository;
         this.authenticationService = authenticationService;
 
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
         setSizeFull();
         setFlexDirection(FlexDirection.COLUMN);
         setAlignItems(Alignment.CENTER);

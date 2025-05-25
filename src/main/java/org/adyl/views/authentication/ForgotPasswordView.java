@@ -17,7 +17,7 @@ import org.adyl.security.services.StoreUserService;
 public class ForgotPasswordView extends VerticalLayout {
 
     public ForgotPasswordView(StoreUserService userService) {
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);

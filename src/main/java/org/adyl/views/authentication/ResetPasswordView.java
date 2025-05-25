@@ -26,7 +26,7 @@ public class ResetPasswordView extends VerticalLayout implements BeforeEnterObse
 
     public ResetPasswordView(StoreUserService userService) {
         this.userService = userService;
-        getElement().getThemeList().add(Lumo.DARK);
+        getElement().getThemeList().add(Lumo.LIGHT);
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
