@@ -23,7 +23,7 @@ public class Customer {
     @NotEmpty(message = "Specify address!")
     private String address;
     @NotEmpty(message = "Specify phone!")
-    @Pattern(regexp = "^\\+373\\d{8}$", message = "Number must be in format +373xxxxxxxx")
+    @Pattern(regexp = "^\\+996\\d{9}$", message = "Number must be in format +996xxx xx xx xx")
     private String phone;
     @NotEmpty(message = "Specify email!")
     @Pattern(regexp = "^.+@.+\\..+$", message = "Email must have next pattern: example@gmail.com")
@@ -49,6 +49,15 @@ public class Customer {
         phone = "+37300000000";
         email = "#unset#@gmail.com";
         this.name = name;
+        orders = new ArrayList<>();
+    }
+
+    public Customer(String name, String email) {
+        idnp = "0000000000000";
+        address = "unset";
+        phone = "+996000000000";
+        this.name = name;
+        this.email = email;
         orders = new ArrayList<>();
     }
 

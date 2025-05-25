@@ -61,7 +61,7 @@ public class StoreUserService implements DefaultService<StoreUserDTO, StoreUser,
 
     private StoreUserDTO save(StoreUser user) {
         if (user.getCustomer() == null) {
-            Customer customerForUser = customerRepository.save(new Customer(user.getUsername()));
+            Customer customerForUser = customerRepository.save(new Customer(user.getUsername(), user.getEmail()));
             user.setCustomer(customerForUser);
         }
         user = userRepository.save(user);

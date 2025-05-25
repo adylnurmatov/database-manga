@@ -133,6 +133,7 @@ public class StoreUser {
                 ", password='" + password + '\'' +
                 ", roles='" + roles + '\'' +
                 ", customer=" + customer +
+                ", email=" + email +
                 ", image='" + image + '\'' +
                 '}';
     }
