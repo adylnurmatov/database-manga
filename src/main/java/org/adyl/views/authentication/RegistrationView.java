@@ -85,13 +85,22 @@ public class RegistrationView extends FlexLayout {
 //        register.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         Anchor home = new Anchor("/", "Home");
+        Anchor login = new Anchor("/login", "Login");
+
+        FlexLayout navLinks = new FlexLayout(home, login);
+        navLinks.setJustifyContentMode(JustifyContentMode.CENTER);
+        navLinks.setAlignItems(Alignment.CENTER);
+        navLinks.getStyle().set("gap", "15px");
+        navLinks.setWidth("100%");
+        navLinks.getStyle().setMarginTop("10px");
 
         FormLayout formLayout = new FormLayout();
         formLayout.setWidth("min-content");
         formLayout.setWidth("100%");
         formLayout.add(username, email, password, passwordConfirmation);
 
-        mainLayout.add(header, usedError, formLayout, register, home);
+        mainLayout.add(header, usedError, formLayout, register, navLinks);
+
         add(mainLayout);
         mainLayout.setAlignContent(ContentAlignment.CENTER);
 

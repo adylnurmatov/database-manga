@@ -40,7 +40,7 @@ p {
     padding: 10px;
     text-align: center;
     border-radius: 4px;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
 
 .book {
